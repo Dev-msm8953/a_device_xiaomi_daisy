@@ -744,16 +744,6 @@ function configure_zram_parameters() {
             echo 1 > /sys/block/zram0/use_dedup
         fi
         echo "$zRamSizeMB""$diskSizeUnit" > /sys/block/zram0/disksize
-
-        # ZRAM may use more memory than it saves if SLAB_STORE_USER
-        # debug option is enabled.
-        if [ -e /sys/kernel/slab/zs_handle ]; then
-            echo 0 > /sys/kernel/slab/zs_handle/store_user
-        fi
-        if [ -e /sys/kernel/slab/zspage ]; then
-            echo 0 > /sys/kernel/slab/zspage/store_user
-        fi
-
     fi
 }
 
