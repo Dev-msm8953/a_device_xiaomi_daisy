@@ -50,6 +50,10 @@ vendor.voice.playback.conc.disabled=true \
 vendor.voice.record.conc.disabled=false \
 vendor.voice.voip.conc.disabled=true
 
+# Sensors
+PRODUCT_VENDOR_PROPERTIES += \
+ro.vendor.sensors.smd=false
+
 # Fluence
 PRODUCT_VENDOR_PROPERTIES += \
 persist.vendor.audio.dualmic.config=endfire \
