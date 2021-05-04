@@ -454,7 +454,13 @@ PRODUCT_PACKAGES += \
     init.qcom.post_boot.sh \
     init.qcom.sh \
     init.qcom.usb.sh \
-    move_wifi_data.sh
+    move_wifi_data.sh \
+    init.qemu-adb-keys.rc \
+    init.qemu-adb-keys.sh
+
+# Device modules
+PRODUCT_PACKAGES += \
+    qemu-adb-keys
 
 # Remove unwanted packages
 PRODUCT_PACKAGES += \

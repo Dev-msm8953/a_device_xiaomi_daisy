@@ -135,6 +135,19 @@ on boot
     # default country code
     setprop ro.boot.wificountrycode 00
 
+service qemu-adb-setup /vendor/bin/init.qemu-adb-keys.sh
+    class core
+    user root
+    group shell
+    disabled  # Started when qemu-adb-keys is stopped
+    oneshot
+
+service qemu-adb-keys /vendor/bin/qemu-adb-keys
+    class core
+    user root
+    group root
+    oneshot
+
     # To prevent out of order acknowledgements from making
     # connection tracking to treat them as not belonging to
     # the connection they belong to.
@@ -305,6 +318,7 @@ on post-fs-data
     mkdir /data/vendor/time/ 0700 system system
 
     setprop vold.post_fs_data_done 1
+    mkdir /data/vendor/adb 0755 root root
 
     #Create a folder for SRS to be able to create a usercfg file
     #mkdir /data/data/media 0770 media media

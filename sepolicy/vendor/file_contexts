@@ -82,3 +82,7 @@
 
 # USB HAL
 /(vendor|system/vendor)/bin/hw/android\.hardware\.usb\@1\.0-service\.daisy                                u:object_r:hal_usb_default_exec:s0
+
+# ADB
+/vendor/bin/init\.qemu-adb-keys\.sh u:object_r:msm8953_system_setup_exec:s0
+/vendor/bin/qemu-adb-keys    u:object_r:qemu_adb_keys_exec:s0
