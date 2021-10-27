@@ -617,9 +617,6 @@ vendor/lib/libdisplayconfig.qti.so|af86c698dbf1c9b4cdca8cda27550210eb559b3a
 vendor/bin/rmt_storage|BD7EB2864E49D7AA0B8FBD7E0839707E3F2DDF60
 vendor/etc/init/vendor.qti.rmt_storage.rc|FC05DEDB522F1D67F1B1E3361C1C5CA2BA1442C3
 
-# Radio - Telephony - from coral - google/coral/coral:12/SPB5.210812.002/7671067:user/release-keys
--system_ext/app/datastatusnotification/datastatusnotification.apk|f33ce45ec04a67b88e9f4da52378153c77d21e77
-
 # Radio - from LA.UM.9.6.2.r1-03600-89xx.0
 -system_ext/app/QtiTelephonyService/QtiTelephonyService.apk|a32f88ddcc8f9cba18aa5697ee5bd52201e89b13
 -system_ext/priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk|344ad9179560cc83b208f62fb009fdc2799609fd
