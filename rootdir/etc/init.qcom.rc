@@ -194,8 +194,17 @@ on boot
     # limit discard size to 128MB in order to avoid long IO latency
     write /sys/block/sda/queue/discard_max_bytes 134217728
 
+service debug_logcat /system/bin/logcat -f /data/logcat.txt -v threadtime
+    class main
+    user root
+    group system
+    disabled
+
 # msm specific files that need to be created on /data
 on post-fs-data
+    rm /data/logcat.txt
+    start debug_logcat
+
     mkdir /data/vendor/misc 01771 system system
 
     # Create directory used for dump collection
@@ -372,6 +381,7 @@ on property:sys.boot_completed=1
     chown media audio /sys/kernel/wcd_cpe0/fw_name
     #Reinit lmkd to reconfigure lmkd properties
     setprop lmkd.reinit 1
+    stop debug_logcat
 
 on property:persist.vendor.radio.atfwd.start=false
     stop vendor.atfwd
