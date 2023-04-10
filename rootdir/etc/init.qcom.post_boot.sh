@@ -249,8 +249,6 @@ function configure_zram_parameters() {
         else
             echo $zRamSizeBytes > /sys/block/zram0/disksize
         fi
-        mkswap /dev/block/zram0
-        swapon /dev/block/zram0 -p 32758
     fi
 }
 
@@ -307,71 +305,6 @@ function enable_swap() {
         mkswap /data/vendor/swap/swapfile
         swapon /data/vendor/swap/swapfile -p 32758
     fi
-}
-
-function configure_memory_parameters() {
-    # Set Memory parameters.
-    #
-    # Set per_process_reclaim tuning parameters
-    # All targets will use vmpressure range 50-70,
-    # All targets will use 512 pages swap size.
-    #
-    # Set allocstall_threshold to 0 for all targets.
-    #
-
-ProductName=`getprop ro.product.name`
-
-if [ "$ProductName" == "msmnile" ]; then
-      # Enable ZRAM
-      configure_zram_parameters
-      configure_read_ahead_kb_values
-      echo 0 > /proc/sys/vm/page-cluster
-      echo 100 > /proc/sys/vm/swappiness
-else
-    arch_type=`uname -m`
-    MemTotalStr=`cat /proc/meminfo | grep MemTotal`
-    MemTotal=${MemTotalStr:16:8}
-
-        # Set PPR parameters
-        if [ -f /sys/devices/soc0/soc_id ]; then
-            soc_id=`cat /sys/devices/soc0/soc_id`
-        else
-            soc_id=`cat /sys/devices/system/soc/soc0/id`
-        fi
-
-        case "$soc_id" in
-          # Do not set PPR parameters for premium targets
-          # sdm845 - 321, 341
-          # msm8998 - 292, 319
-          # msm8996 - 246, 291, 305, 312
-          "321" | "341" | "292" | "319" | "246" | "291" | "305" | "312")
-            ;;
-          *)
-            #Set PPR parameters for all other targets.
-            echo 0 > /sys/module/process_reclaim/parameters/enable_process_reclaim
-            echo 50 > /sys/module/process_reclaim/parameters/pressure_min
-            echo 70 > /sys/module/process_reclaim/parameters/pressure_max
-            echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
-            echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
-            ;;
-        esac
-    fi
-
-    # Set allocstall_threshold to 0 for all targets.
-    # Set swappiness to 100 for all targets
-    echo 0 > /sys/module/vmpressure/parameters/allocstall_threshold
-    echo 100 > /proc/sys/vm/swappiness
-
-    # Disable wsf for all targets beacause we are using efk.
-    # wsf Range : 1..1000 So set to bare minimum value 1.
-    echo 1 > /proc/sys/vm/watermark_scale_factor
-
-    configure_zram_parameters
-
-    configure_read_ahead_kb_values
-
-    enable_swap
-fi
 }
 
 function enable_memory_features()
@@ -1170,8 +1103,6 @@ case "$target" in
             fi
             ;;
         esac
-        # Set Memory parameters
-        configure_memory_parameters
     ;;
 esac
 
@@ -1347,9 +1278,6 @@ case "$target" in
                 echo 1 > /sys/module/lpm_levels/lpm_workarounds/dynamic_clock_gating
                 # Enable timer migration to little cluster
                 echo 1 > /proc/sys/kernel/power_aware_timer_migration
-
-                # Set Memory parameters
-                configure_memory_parameters
 
             ;;
             *)
@@ -1552,9 +1480,6 @@ case "$target" in
                 echo 110 > /proc/sys/kernel/sched_grp_downmigrate
                 echo   1 > /proc/sys/kernel/sched_enable_thread_grouping
 
-                # Set Memory parameters
-                configure_memory_parameters
-
             ;;
         esac
         #Enable Memory Features
@@ -1739,8 +1664,6 @@ case "$target" in
                 echo 85 > /proc/sys/kernel/sched_upmigrate
                 echo 85 > /proc/sys/kernel/sched_downmigrate
 
-                # Set Memory parameters
-                configure_memory_parameters
             ;;
         esac
         case "$soc_id" in
@@ -1846,8 +1769,6 @@ case "$target" in
             echo 633600 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
 
             # cpuset settings
-            echo 0-3 > /dev/cpuset/background/cpus
-            echo 0-3 > /dev/cpuset/system-background/cpus
             # choose idle CPU for top app tasks
             echo 1 > /dev/stune/top-app/schedtune.prefer_idle
 
@@ -1885,9 +1806,6 @@ case "$target" in
 
             # Enable low power modes
             echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
-
-            # Set Memory parameters
-            configure_memory_parameters
 
             # Setting b.L scheduler parameters
             echo 76 > /proc/sys/kernel/sched_downmigrate
@@ -2011,8 +1929,7 @@ case "$target" in
                 echo 1 > /sys/module/lpm_levels/lpm_workarounds/dynamic_clock_gating
                 # Enable timer migration to little cluster
                 echo 1 > /proc/sys/kernel/power_aware_timer_migration
-                # Set Memory parameters
-                configure_memory_parameters
+
                 ;;
                 *)
                 ;;
@@ -2112,8 +2029,6 @@ case "$target" in
                 echo 1 > /sys/module/lpm_levels/lpm_workarounds/dynamic_clock_gating
                 # Enable timer migration to little cluster
                 echo 1 > /proc/sys/kernel/power_aware_timer_migration
-                # Set Memory parameters
-                configure_memory_parameters
             ;;
             *)
 
@@ -2187,10 +2102,6 @@ case "$target" in
                      echo 140 > /proc/sys/kernel/sched_group_upmigrate
                      echo 120 > /proc/sys/kernel/sched_group_downmigrate
 
-                     # cpuset settings
-                     #echo 0-3 > /dev/cpuset/background/cpus
-                     #echo 0-3 > /dev/cpuset/system-background/cpus
-
                      # Bring up all cores online
                      echo 1 > /sys/devices/system/cpu/cpu1/online
                      echo 1 > /sys/devices/system/cpu/cpu2/online
@@ -2237,9 +2148,6 @@ case "$target" in
                      echo 1 > /sys/devices/system/cpu/cpu3/online
                  ;;
                 esac
-
-                # Set Memory parameters
-                configure_memory_parameters
 
                 #disable sched_boost
                 echo 0 > /proc/sys/kernel/sched_boost
@@ -2334,10 +2242,6 @@ case "$target" in
             echo 1 > /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
             echo 20 > /proc/sys/kernel/sched_small_wakee_task_load
 
-            # cpuset settings
-            echo 0-3 > /dev/cpuset/background/cpus
-            echo 0-3 > /dev/cpuset/system-background/cpus
-
             # disable thermal bcl hotplug to switch governor
             echo 0 > /sys/module/msm_thermal/core_control/enabled
 
@@ -2411,9 +2315,6 @@ case "$target" in
             echo "0:0 1:0 2:0 3:0 4:1747200 5:0 6:0 7:0" > /sys/module/cpu_boost/parameters/powerkey_input_boost_freq
             echo 400 > /sys/module/cpu_boost/parameters/powerkey_input_boost_ms
 
-            # Set Memory parameters
-            configure_memory_parameters
-
             # Enable bus-dcvs
             for cpubw in /sys/class/devfreq/*qcom,cpubw*
             do
@@ -2482,10 +2383,6 @@ case "$target" in
             echo 15 > /proc/sys/kernel/sched_init_task_load
             echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
             echo 50000 > /proc/sys/kernel/sched_short_burst_ns
-
-            # cpuset settings
-            echo 0-3 > /dev/cpuset/background/cpus
-            echo 0-3 > /dev/cpuset/system-background/cpus
 
             # disable thermal bcl hotplug to switch governor
             echo 0 > /sys/module/msm_thermal/core_control/enabled
@@ -2585,9 +2482,6 @@ case "$target" in
                 echo -n enable > $mode
             done
 
-            # Set Memory parameters
-            configure_memory_parameters
-
             # Enable bus-dcvs
             for cpubw in /sys/class/devfreq/*qcom,cpubw*
             do
@@ -2649,11 +2543,6 @@ case "$target" in
             echo 85 > /proc/sys/kernel/sched_group_downmigrate
             echo 100 > /proc/sys/kernel/sched_group_upmigrate
 
-            # cpuset settings
-            echo 0-3 > /dev/cpuset/background/cpus
-            echo 0-3 > /dev/cpuset/system-background/cpus
-
-
             # configure governor settings for little cluster
             echo "schedutil" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
             echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
@@ -2681,9 +2570,6 @@ case "$target" in
             echo -6 >  /sys/devices/system/cpu/cpu7/sched_load_boost
             echo 85 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_load
             echo 85 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/hispeed_load
-
-            # Set Memory parameters
-            configure_memory_parameters
 
             # Enable bus-dcvs
             for device in /sys/devices/platform/soc
@@ -2804,9 +2690,6 @@ case "$target" in
       echo "0:1209600" > /sys/module/cpu_boost/parameters/input_boost_freq
       echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
 
-      # Set Memory parameters
-      configure_memory_parameters
-
       # Enable bus-dcvs
       for cpubw in /sys/class/devfreq/*qcom,cpubw*
             do
@@ -2857,10 +2740,6 @@ case "$target" in
             echo N > /sys/module/lpm_levels/L3/cpu5/ret/idle_enabled
             echo N > /sys/module/lpm_levels/L3/cpu6/ret/idle_enabled
             echo N > /sys/module/lpm_levels/L3/cpu7/ret/idle_enabled
-
-            # cpuset parameters
-            echo 0-5 > /dev/cpuset/background/cpus
-            echo 0-5 > /dev/cpuset/system-background/cpus
 
             # Turn off scheduler boost at the end
             echo 0 > /proc/sys/kernel/sched_boost
@@ -2936,9 +2815,6 @@ case "$target" in
       echo "0:1209600" > /sys/module/cpu_boost/parameters/input_boost_freq
       echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
 
-      # Set Memory parameters
-      configure_memory_parameters
-
       # Enable bus-dcvs
       for device in /sys/devices/platform/soc
       do
@@ -2999,10 +2875,6 @@ case "$target" in
       done
 
 
-            # cpuset parameters
-            echo 0-5 > /dev/cpuset/background/cpus
-            echo 0-5 > /dev/cpuset/system-background/cpus
-
             # Turn off scheduler boost at the end
             echo 0 > /proc/sys/kernel/sched_boost
 
@@ -3059,9 +2931,6 @@ case "$target" in
 
             echo "0:1248000" > /sys/module/cpu_boost/parameters/input_boost_freq
             echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
-
-            # Set Memory parameters
-            configure_memory_parameters
 
             # Enable bus-dcvs
             for device in /sys/devices/platform/soc
@@ -3138,10 +3007,6 @@ case "$target" in
 	        done
 
             done
-
-            # cpuset parameters
-                echo 0-5 > /dev/cpuset/background/cpus
-                echo 0-5 > /dev/cpuset/system-background/cpus
 
                 # Turn off scheduler boost at the end
                 echo 0 > /proc/sys/kernel/sched_boost
@@ -3260,18 +3125,11 @@ case "$target" in
 
             echo "cpufreq" > /sys/class/devfreq/soc:qcom,mincpubw/governor
 
-            # cpuset parameters
-            echo 0-5 > /dev/cpuset/background/cpus
-            echo 0-5 > /dev/cpuset/system-background/cpus
-
             # Turn off scheduler boost at the end
             echo 0 > /proc/sys/kernel/sched_boost
 
             # Turn on sleep modes.
             echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
-
-            # Set Memory parameters
-            configure_memory_parameters
             ;;
         esac
     ;;
@@ -3670,9 +3528,6 @@ case "$target" in
 	echo N > /sys/module/lpm_levels/parameters/sleep_disabled
         # Starting io prefetcher service
         start iop
-
-        # Set Memory parameters
-        configure_memory_parameters
     ;;
 esac
 
@@ -3810,10 +3665,6 @@ case "$target" in
 	echo "compute" > /sys/class/devfreq/soc:qcom,mincpubw/governor
 	echo 10 > /sys/class/devfreq/soc:qcom,mincpubw/polling_interval
 
-	# cpuset parameters
-        echo 0-3 > /dev/cpuset/background/cpus
-        echo 0-3 > /dev/cpuset/system-background/cpus
-
 	# Turn off scheduler boost at the end
         echo 0 > /proc/sys/kernel/sched_boost
 	# Disable CPU Retention
@@ -3828,7 +3679,6 @@ case "$target" in
 	echo N > /sys/module/lpm_levels/L3/l3-dyn-ret/idle_enabled
         # Turn on sleep modes.
         echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
-	echo 100 > /proc/sys/vm/swappiness
 	echo 120 > /proc/sys/vm/watermark_scale_factor
     ;;
 esac
@@ -3871,10 +3721,6 @@ case "$target" in
 	echo 0 > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
 	echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
 
-	# cpuset parameters
-	echo 0-3 > /dev/cpuset/background/cpus
-	echo 0-3 > /dev/cpuset/system-background/cpus
-
 	# Turn off scheduler boost at the end
 	echo 0 > /proc/sys/kernel/sched_boost
 
@@ -3882,7 +3728,6 @@ case "$target" in
 	echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
 	echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/up_rate_limit_us
 	echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
-	echo 1209600 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
 	echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
 	echo 1 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/pl
 
@@ -3907,9 +3752,6 @@ case "$target" in
 	# Disable wsf, beacause we are using efk.
 	# wsf Range : 1..1000 So set to bare minimum value 1.
         echo 1 > /proc/sys/vm/watermark_scale_factor
-
-        echo 0-3 > /dev/cpuset/background/cpus
-        echo 0-3 > /dev/cpuset/system-background/cpus
 
         # Enable oom_reaper
 	if [ -f /sys/module/lowmemorykiller/parameters/oom_reaper ]; then
@@ -4031,7 +3873,6 @@ case "$target" in
     esac
 
     echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
-    configure_memory_parameters
     ;;
 esac
 
@@ -4183,12 +4024,7 @@ case "$target" in
 	echo N > /sys/module/lpm_levels/system/perf/perf-l2-ret/idle_enabled
 	echo N > /sys/module/lpm_levels/parameters/sleep_disabled
 
-        echo 0-3 > /dev/cpuset/background/cpus
-        echo 0-3 > /dev/cpuset/system-background/cpus
         echo 0 > /proc/sys/kernel/sched_boost
-
-        # Set Memory parameters
-        configure_memory_parameters
     ;;
 esac
 
@@ -4273,10 +4109,6 @@ case "$target" in
         do
             echo 30 > $gpu_bimc_guard_band_mbps
         done
-
-        # Set Memory parameters
-        configure_memory_parameters
-        restorecon -R /sys/devices/system/cpu
 	;;
 esac
 
@@ -4475,7 +4307,6 @@ echo 6 > /sys/devices/platform/soc/1c00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/default_p
 #VM Changes
 echo 40 > /proc/sys/vm/dirty_ratio
 echo 60 > /proc/sys/vm/vfs_cache_pressure
-echo 85 > /proc/sys/vm/swappiness
 echo 3600 > /proc/sys/vm/stat_interval
 
 #Uclamp changes (reduces jitter,apparently)
