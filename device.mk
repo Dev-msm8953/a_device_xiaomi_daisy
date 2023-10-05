@@ -556,7 +556,7 @@ PRODUCT_PACKAGES += \
 # VNDK
 PRODUCT_PACKAGES += \
     vndk_package \
-    libstdc++.vendor \
+    libstdc++_vendor \
     com.android.vndk.current.on_vendor
 
 PRODUCT_COPY_FILES += \
