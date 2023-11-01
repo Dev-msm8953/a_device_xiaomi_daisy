@@ -48,6 +48,9 @@ function blob_fixup() {
         vendor/etc/init/dataqti.rc)
             sed -i '19d' "${2}"
             ;;
+        vendor/bin/pm-service)
+            grep -q "libutils-v33.so" "${2}" || "${PATCHELF}" --add-needed "libutils-v33.so" "${2}"
+            ;;
     esac
 }
 
