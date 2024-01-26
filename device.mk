@@ -237,11 +237,7 @@ PRODUCT_PACKAGES += \
     libgralloc.system.qti\
     libdisplayconfig.qti \
     libdisplayconfig.qti.vendor \
-    libqdMetaData \
-    libqdMetaData.system \
     libgenlock \
-    libnl \
-    libwfdaac \
     memtrack.msm8953 \
     vendor.display.config@1.0.vendor \
     vendor.display.config@2.0 \

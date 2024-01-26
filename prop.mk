@@ -114,7 +114,6 @@ debug.mdpcomp.logs=0 \
 debug.sf.enable_hwc_vds=1 \
 debug.sf.auto_latch_unsignaled=true \
 debug.sf.recomputecrop=0 \
-persist.debug.wfd.enable=1 \
 persist.hwc.enable_vds=1 \
 persist.hwc.mdpcomp.enable=true \
 ro.opengles.version=196610 \
