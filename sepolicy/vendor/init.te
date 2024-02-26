@@ -17,7 +17,6 @@ allow init sysfs_kgsl:file { setattr };
 allow init sysfs_kgsl:lnk_file { read };
 allow init sysfs:file rw_file_perms;
 allow init proc_last_kmsg:file { setattr };
-allow init iorapd_data_file:file getattr;
 allow init oemfs:dir mounton;
 allow init sysfs_devfreq:lnk_file { open read write };
 allow init sysfs_devfreq:file { open read write };
