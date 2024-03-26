@@ -568,7 +568,8 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     libprotobuf-cpp-full-vendorcompat \
-    libprotobuf-cpp-lite-vendorcompat
+    libprotobuf-cpp-lite-vendorcompat \
+    libprotobuf-cpp-full-3.9.1-vendorcompat
 
 # Vibrator
 PRODUCT_PACKAGES += \
