@@ -785,9 +785,6 @@ vendor/lib64/vendor.qti.ims.rcsconfig@2.1.so|ae519b1c906e60b66e885922e620f456548
 vendor/lib64/vendor.qti.imsrtpservice@3.0-service-Impl.so|939193852a791072058e87949f10dc62456f7d06
 vendor/lib64/vendor.qti.imsrtpservice@3.0.so|25517caf74691b812320b46b477a3f4161cc1bcf
 
-# Radio - Telephony - from LA.UM.9.6.2.r1-03600-89xx.0
-system_ext/framework/qti-telephony-common.jar|0c49cfb8025ab06323227c7a72b5af39af3c3de7
-
 # Sensors - from LA.UM.9.6.2.r1-03600-89xx.0
 system_ext/lib/vendor.qti.hardware.sensorscalibrate@1.0.so|81934fd454fd30282ef1a8a90b7374317f6c42de
 system_ext/lib64/vendor.qti.hardware.sensorscalibrate@1.0.so|32257292ed8c5b2e2f905571b82bb26383a1a041
