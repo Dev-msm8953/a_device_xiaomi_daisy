@@ -128,7 +128,9 @@ vendor.display.use_smooth_motion=1
 
 # HWUI
 PRODUCT_VENDOR_PROPERTIES += \
-debug.hwui.skia_atrace_enabled=false
+debug.hwui.skia_atrace_enabled=false \
+debug.hwui.use_hint_manager=true \
+debug.hwui.target_cpu_time_percent=30
 
 # DPM
 PRODUCT_SYSTEM_EXT_PROPERTIES += \
