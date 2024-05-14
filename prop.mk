@@ -196,10 +196,6 @@ vendor.vidc.enc.disable.pq=true \
 vendor.vidc.enc.disable_bframes=1 \
 vendor.video.disable.ubwc=1
 
-# Wifi Display (Platform)
-PRODUCT_SYSTEM_PROPERTIES += \
-media.wfd.max_resolution=7
-
 # Memory optimizations
 PRODUCT_VENDOR_PROPERTIES += \
 ro.vendor.qti.sys.fw.bservice_enable=true

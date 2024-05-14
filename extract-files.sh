@@ -42,41 +42,11 @@ function blob_fixup() {
             "${PATCHELF}" --remove-needed "libhidlbase.so" "${2}"
             sed -i "s/libhidltransport.so/libhidlbase-v32.so\x00/" "${2}"
             ;;
-        system/lib/libcameraservice.so)
-            "${PATCHELF}" --add-needed "libmedia_jni_shim.so" "${2}"
-            ;;
-        system/lib64/libcameraservice.so)
-            "${PATCHELF}" --add-needed "libcameraservice_shim.so" "${2}"
-            ;;
-        system/lib64/android.system.net.netd@1.1.so)
-            "${PATCHELF}" --add-needed "libnetd_shim.so" "${2}"
-            ;;
-        vendor/lib64/vendor.qti.hardware.data.latency@1.0.so)
-            "${PATCHELF}" --add-needed "liblatency_shim.so" "${2}"
-            ;;
-        vendor/lib64/libwvhidl.so)
-            "${PATCHELF}" --add-needed "libwvhidl_shim.so" "${2}"
-            ;;
-        vendor/lib64/vendor.qti.hardware.fm@1.0.so)
-            "${PATCHELF}" --add-needed "libfm_shim.so" "${2}"
-            ;;
-        system/lib64/android.hardware.drm@1.4.so)
-            "${PATCHELF}" --add-needed "libdrm_shim.so" "${2}"
-            ;;
-        apex/com.android.media.swcodec/lib64/libcodec2_hidl@1.0.so)
-            "${PATCHELF}" --add-needed "libcodec2_hidl_shim.so" "${2}"
-            ;;
-        system/lib64/android.hardware.usb.gadget@1.0.so)
-            "${PATCHELF}" --add-needed "libgadget_shim.so" "${2}"
-            ;;
         vendor/etc/init/qcrild.rc)
             sed -i '4d;11d' "${2}"
             ;;
         vendor/etc/init/dataqti.rc)
             sed -i '19d' "${2}"
-            ;;
-        system/lib64/libc++.so)
-            "${PATCHELF}" --add-needed "libc++_shim.so" "${2}"
             ;;
     esac
 }

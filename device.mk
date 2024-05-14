@@ -481,17 +481,7 @@ PRODUCT_PACKAGES += \
 
 # Shims
 PRODUCT_PACKAGES += \
-    lib-imsvt \
-    libmedia_jni_shim \
-    libnetd_shim \
-    liblatency_shim \
-    libwvhidl_shim \
-    libfm_shim \
-    libdrm_shim \
-    libcodec2_hidl_shim \
-    libgadget_shim \
-    libcameraservice_shim \
-    libc++_shim
+    lib-imsvt
 
 # RIL
 PRODUCT_PACKAGES += \
