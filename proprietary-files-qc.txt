@@ -613,6 +613,10 @@ vendor/lib64/libqmi_legacy.so|f7fe22113d12d9992b876ea59bd1aa4042cc587b
 # QTI Display - from LA.UM.9.6.2.r1-03600-89xx.0
 vendor/lib/libdisplayconfig.qti.so|af86c698dbf1c9b4cdca8cda27550210eb559b3a
 
+# RemoteFS - from Realme Porsche
+vendor/bin/rmt_storage|BD7EB2864E49D7AA0B8FBD7E0839707E3F2DDF60
+vendor/etc/init/vendor.qti.rmt_storage.rc|FC05DEDB522F1D67F1B1E3361C1C5CA2BA1442C3
+
 # Radio - Telephony - from coral - google/coral/coral:12/SPB5.210812.002/7671067:user/release-keys
 -system_ext/app/datastatusnotification/datastatusnotification.apk|f33ce45ec04a67b88e9f4da52378153c77d21e77
 
@@ -630,7 +634,6 @@ vendor/bin/qrtr-cfg|9786455690d4b8e60681f40ebe61fc937d2cd713
 vendor/bin/qrtr-lookup|6342b6b636327c53258d0d54c9dd93e34a3da3f7
 vendor/bin/qrtr-ns|09cff0de46c5d4eb1cd7dfa5b5bdda015e9d7a75
 vendor/bin/qti|ea171a048f00b3d5312c3e89b0a7384022efbe9c
-vendor/bin/rmt_storage|c95109e249500076b178837eca3cb5a66021ebb3
 vendor/bin/tftp_server|da8ae0ecb3f74da0308c9feec1a6388e2cd98e9a
 vendor/etc/data/dsi_config.xml|83d1527134d46bab99580ccff5897a6d0d187b2c
 vendor/etc/data/netmgr_config.xml|b206320a9af986847018500699bc7f547b8c06b1
@@ -638,7 +641,6 @@ vendor/etc/init/dataadpl.rc|afb430c57dec6d9a2fd75e06a0bb859a2f1ceba0
 vendor/etc/init/dataqti.rc|cd570e9bb74ed44ffa735c1107f7db4540398c51
 vendor/etc/init/netmgrd.rc|687a8dffb169d2e4db11126456a203bc3c19d51d
 vendor/etc/init/port-bridge.rc|9a19ffaaf6127542c911ff6d960e9fb26bb416b1
-vendor/etc/init/vendor.qti.rmt_storage.rc|8cfec5930a356ebf2035eec4c11a6fae4a870634
 vendor/etc/init/vendor.qti.tftp.rc|dee04804aea967e3ff7801f789ae49c6a779ba56
 vendor/etc/seccomp_policy/atfwd@2.0.policy|c371126e88676d9405faf087b9880aa95cc9510d
 vendor/lib/libmdmdetect.so|b7c1e8ae955840f76cc6244d6511a92d15fb5f6e
